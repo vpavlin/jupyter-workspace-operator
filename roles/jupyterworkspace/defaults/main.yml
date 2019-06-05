@@ -1,7 +1,6 @@
 ---
 # defaults file for jupyterworkspace
-state: present
-name: "{{ meta.name | default('tensorflow-jupyterworkspace') }}"
+name: "{{ meta.name | default('tensorflow') }}"
 
 resources:
   memory: 2Gi

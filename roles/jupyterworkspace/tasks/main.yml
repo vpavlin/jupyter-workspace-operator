@@ -1,8 +1,7 @@
 ---
 # tasks file for jupyterworkspace
-- name: 'Set Jupyter Workspace objects state={{ state }}'
+- name: 'Configure Jupyter Workspace {{ name }}'
   k8s:
-    state: '{{ state }}'
     definition: "{{ lookup('template', item.name) }}"
   with_items:
     - name: "configMap.json.j2"
@@ -12,9 +11,8 @@
     - name: "service.json.j2"
     - name: "route.json.j2"
 
-- name: 'Set Role Binding for the workspace state={{ state }}'
+- name: 'Set Role Binding for Jupyter Workspace {{ name }}'
   k8s:
-    state: '{{ state }}'
     definition: "{{ lookup('template', item.name) }}"
   when: can_edit_namespace
   with_items:
