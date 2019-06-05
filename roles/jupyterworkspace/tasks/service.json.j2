@@ -8,14 +8,14 @@
             "app": "{{ name}}"
         },
         "annotations": {
-{% if openshiftAuth %}
+{% if openshift_auth %}
             "service.alpha.openshift.io/serving-cert-secret-name": "{{ name }}-tls"
 {% endif %}
         }
     },
     "spec": {
         "ports": [
-{% if openshiftAuth %}
+{% if openshift_auth %}
             {
                 "name": "jupyter-tcp",
                 "protocol": "TCP",

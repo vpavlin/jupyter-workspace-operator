@@ -38,7 +38,7 @@
                             "claimName": "{{ name }}-data"
                         }
                     },
-{% if openshiftAuth %}
+{% if openshift_auth %}
                     {
                         "name": "proxy-tls",
                         "secret": {
@@ -56,7 +56,7 @@
                 "containers": [
                     {
                         "name": "notebook",
-                        "image": "quay.io/vpavlin/jupyter-notebook-tensorflow",
+                        "image": "{{ jupyter_image }}",
                         "ports": [
                             {
                                 "containerPort": 8080,
@@ -87,19 +87,19 @@
                         "env": [
                             {
                                 "name": "S3_ENDPOINT_URL",
-                                "value": "{{ objectStorage['s3Endpoint'] }}"
+                                "value": "{{ object_storage['s3_endpoint'] }}"
                             },
                             {
                                 "name": "AWS_SECRET_ACCESS_KEY",
-                                "value": "{{ objectStorage['secretAccessKey'] }}"
+                                "value": "{{ object_storage['secret_access_key'] }}"
                             },
                             {
                                 "name": "AWS_ACCESS_KEY_ID",
-                                "value": "{{ objectStorage['accessKeyId'] }}"
+                                "value": "{{ object_storage['access_key_id'] }}"
                             }
                         ]
                     }
-{% if openshiftAuth %}
+{% if openshift_auth %}
                     ,
                     {
                         "name": "oauth-proxy",

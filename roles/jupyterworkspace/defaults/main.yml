@@ -6,11 +6,11 @@ name: "{{ meta.name | default('tensorflow-jupyterworkspace') }}"
 resources:
   memory: 2Gi
   cpu: 1
-  volumeSize: 2Gi
-objectStorage:
-  s3Endpoint: http://ceph:8080
-  secretAccessKey: ""
-  accessKeyId: ""
-jupyterImage: "quay.io/vpavlin/jupyter-notebook-tensorflow"
-openshiftAuth: true
-canEditNamespace: false
+  volume_size: 2Gi
+object_storage:
+  s3_endpoint: http://ceph:8080
+  secret_access_key: ""
+  access_key_id: ""
+jupyter_image: "quay.io/vpavlin/jupyter-notebook-tensorflow"
+openshift_auth: true
+can_edit_namespace: false
