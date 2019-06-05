@@ -3,7 +3,7 @@
     "kind": "ConfigMap",
     "metadata": {
         "name": "{{ name }}",
-        "namespace": {{ namespace }},
+        "namespace": {{ meta.namespace }},
         "labels": {
             "app": "{{ name }}"
         }
