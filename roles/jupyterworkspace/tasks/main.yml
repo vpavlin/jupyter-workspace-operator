@@ -1,7 +1,7 @@
 ---
 # tasks file for jupyterworkspace
 - name: 'Set Jupyter Workspace objects state={{ state }}'
-  openshift_raw:
+  k8s:
     state: '{{ state }}'
     definition: "{{ lookup('template', item.name) }}"
   with_items:
