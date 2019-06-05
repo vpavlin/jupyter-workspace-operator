@@ -1,0 +1,142 @@
+{
+    "kind": "DeploymentConfig",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "{{ name }}",
+        "namespace": {{ namespace }},
+        "labels": {
+            "app": "{{ name }}"
+        }
+    },
+    "spec": {
+        "strategy": {
+            "type": "Recreate"
+        },
+        "triggers": [
+            {
+                "type": "ConfigChange"
+            }
+        ],
+        "replicas": 1,
+        "selector": {
+            "app": "{{ name }}",
+            "deploymentconfig": "{{ name }}"
+        },
+        "template": {
+            "metadata": {
+                "labels": {
+                    "app": "{{ name }}",
+                    "deploymentconfig": "{{ name }}"
+                }
+            },
+            "spec": {
+                "serviceAccountName": "{{ name }}",
+                "volumes": [
+                    {
+                        "name": "data",
+                        "persistentVolumeClaim": {
+                            "claimName": "{{ name }}-data"
+                        }
+                    },
+{% if openshiftAuth %}
+                    {
+                        "name": "proxy-tls",
+                        "secret": {
+                            "secretName": "{{ name }}-tls"
+                        }
+                    },
+{% endif %}
+                    {
+                        "name": "jupyter-config",
+                        "configMap": {
+                            "name": "{{ name }}"
+                        }
+                    }
+                ],
+                "containers": [
+                    {
+                        "name": "notebook",
+                        "image": "quay.io/vpavlin/jupyter-notebook-tensorflow",
+                        "ports": [
+                            {
+                                "containerPort": 8080,
+                                "protocol": "TCP"
+                            },
+                            {
+                                "containerPort": 8081,
+                                "protocol": "TCP"
+                            }
+                        ],
+                        "resources": {
+                            "limits": {
+                                "memory": "{{ resources['memory'] }}",
+                                "cpu": "{{ resources['cpu'] }}"
+                            }
+                        },
+                        "volumeMounts": [
+                            {
+                                "name": "data",
+                                "mountPath": "/opt/app-root/src"
+                            },
+                            {
+                                "name": "jupyter-config",
+                                "mountPath": "/opt/app-root/src/.jupyter/jupyter_config.py",
+                                "subPath": "jupyter_config.py"
+                            }
+                        ],
+                        "env": [
+                            {
+                                "name": "S3_ENDPOINT_URL",
+                                "value": "{{ objectStorage['s3Endpoint'] }}"
+                            },
+                            {
+                                "name": "AWS_SECRET_ACCESS_KEY",
+                                "value": "{{ objectStorage['secretAccessKey'] }}"
+                            },
+                            {
+                                "name": "AWS_ACCESS_KEY_ID",
+                                "value": "{{ objectStorage['accessKeyId'] }}"
+                            }
+                        ]
+                    }
+{% if openshiftAuth %}
+                    ,
+                    {
+                        "name": "oauth-proxy",
+                        "image": "openshift/oauth-proxy:latest",
+                        "ports": [
+                            {
+                                "containerPort": 8443,
+                                "protocol": "TCP",
+                                "name": "public"
+                            }
+                        ],
+                        "resources": {
+                            "limits": {
+                                "memory": "512Mi"
+                            }
+                        },
+                        "env": [
+                        ],
+                        "volumeMounts": [
+                            {
+                                "mountPath": "/etc/tls/private",
+                                "name": "proxy-tls"
+                            }
+                        ],
+                        "args": [
+                            "--https-address=:8443",
+                            "--provider=openshift",
+                            "--openshift-service-account={{ name }}",
+                            "--upstream=http://localhost:8080",
+                            "--tls-cert=/etc/tls/private/tls.crt",
+                            "--tls-key=/etc/tls/private/tls.key",
+                            "--cookie-secret=24334JOI34"
+                        ]
+                    }
+{% endif %}
+                ]
+            }
+        }
+    }
+}

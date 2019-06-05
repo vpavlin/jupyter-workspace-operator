@@ -1,0 +1,18 @@
+apiVersion: opendatahub.io/v1alpha1
+kind: JupyterWorkspace
+metadata:
+  name: tensorflow-jupyterworkspace
+spec:
+  # Add fields here
+  resources:
+    memory: 2Gi
+    cpu: 1
+    volumeSize: 2Gi
+  objectStorage:
+    s3Endpoint: http://ceph:8080
+    secretAccessKey: ""
+    accessKeyId: ""
+  jupyterImage: "quay.io/vpavlin/jupyter-notebook-tensorflow"
+  openshiftAuth: true
+  canEditNamespace: false
+  

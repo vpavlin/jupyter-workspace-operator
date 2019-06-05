@@ -1,0 +1,39 @@
+{
+    "kind": "Service",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "{{ name }}",
+        "namespace": {{ namespace }},
+        "labels": {
+            "app": "{{ name}}"
+        },
+        "annotations": {
+{% if openshiftAuth %}
+            "service.alpha.openshift.io/serving-cert-secret-name": "{{ name }}-tls"
+{% endif %}
+        }
+    },
+    "spec": {
+        "ports": [
+{% if openshiftAuth %}
+            {
+                "name": "jupyter-tcp",
+                "protocol": "TCP",
+                "port": 443,
+                "targetPort": 8443
+            }
+{% else %}
+            {
+                "name": "jupyter-tcp",
+                "protocol": "TCP",
+                "port": 8080,
+                "targetPort": 8080
+            }
+{% endif %}
+        ],
+        "selector": {
+            "app": "{{ name }}",
+            "deploymentconfig": "{{ name }}"
+        }
+    }
+}

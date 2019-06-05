@@ -1,0 +1,30 @@
+{
+    "kind": "Route",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "{{ name }}",
+        "namespace": {{ namespace }},
+        "labels": {
+            "app": "{{ name }}"
+        }
+    },
+    "spec": {
+        "host": "",
+        "to": {
+            "kind": "Service",
+            "name": "{{ name }}",
+            "weight": 100
+        },
+        "port": {
+            "targetPort": "jupyter-tcp"
+        },
+        "tls": {
+{% if openshiftAuth %}
+            "termination": "Reencrypt",
+{% else %}
+            "termination": "Edge",
+{% endif %}
+            "insecureEdgeTerminationPolicy": "Redirect"
+        }
+    }
+}

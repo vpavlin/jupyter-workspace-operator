@@ -1,0 +1,20 @@
+{
+    "kind": "RoleBinding",
+    "apiVersion": "v1",
+    "metadata": {
+    "name": "{{ name }}-edit",
+    "namespace": {{ namespace }},
+    "labels": {
+        "app": "{{ name }}"
+    }
+    },
+    "subjects": [
+    {
+        "kind": "ServiceAccount",
+        "name": "{{ name }}"
+    }
+    ],
+    "roleRef": {
+        "name": "edit"
+    }
+}

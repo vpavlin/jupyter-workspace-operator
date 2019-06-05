@@ -1,0 +1,23 @@
+{
+    "kind": "PersistentVolumeClaim",
+    "apiVersion": "v1",
+    "metadata": {
+        "name": "{{ name }}-data",
+        "namespace": {{ namespace }},
+        "annotations": {
+        },
+        "labels": {
+            "app": "{{ name }}"
+        }
+    },
+    "spec": {
+        "accessModes": [
+            "ReadWriteOnce"
+        ],
+        "resources": {
+            "requests": {
+                "storage": "{{ resources['volumeSize'] }}"
+            }
+        }
+    }
+}
