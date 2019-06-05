@@ -9,7 +9,7 @@ spec:
     cpu: 1
     volumeSize: 2Gi
   objectStorage:
-    s3Endpoint: http://ceph:8080
+    endpoint: http://ceph:8080
     secretAccessKey: ""
     accessKeyId: ""
   jupyterImage: "quay.io/vpavlin/jupyter-notebook-tensorflow"
