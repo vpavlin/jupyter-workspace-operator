@@ -5,12 +5,12 @@
     state: present
     definition: "{{ lookup('template', item.name) }}"
   with_items:
-    - name: "configMap.json.j2"
     - name: "serviceAccount.json.j2"
     - name: "persistentVolumeClaim.json.j2"
     - name: "deploymentConfig.json.j2"
     - name: "service.json.j2"
     - name: "route.json.j2"
+    - name: "configMap.json.j2"
 
 - name: 'Set Role Binding for Jupyter Workspace {{ name }}'
   k8s:
