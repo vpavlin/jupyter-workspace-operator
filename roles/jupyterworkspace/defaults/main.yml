@@ -1,5 +1,6 @@
 ---
 # defaults file for jupyterworkspace
+delete_event: false
 name: "{{ meta.name | default('tensorflow') }}"
 
 resources:

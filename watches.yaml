@@ -3,3 +3,7 @@
   group: opendatahub.io
   kind: JupyterWorkspace
   role: /opt/ansible/roles/jupyterworkspace
+  finalizer:
+    name: finalizer.jupyterworkspace.opendatahub.io
+    vars:
+      delete_event: true

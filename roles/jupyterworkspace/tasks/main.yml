@@ -6,11 +6,20 @@
     definition: "{{ lookup('template', item.name) }}"
   with_items:
     - name: "serviceAccount.json.j2"
-    - name: "persistentVolumeClaim.json.j2"
     - name: "deploymentConfig.json.j2"
     - name: "service.json.j2"
     - name: "route.json.j2"
     - name: "configMap.json.j2"
+
+- debug: 
+    msg: "{{ delete_event }}"
+
+- name: 'Set Role Binding for Jupyter Workspace {{ name }}'
+  k8s:
+    state: "{{ 'absent' if delete_event else 'present' }}"
+    definition: "{{ lookup('template', item.name) }}"
+  with_items:
+    - name: "persistentVolumeClaim.json.j2"
 
 - name: 'Set Role Binding for Jupyter Workspace {{ name }}'
   k8s:
