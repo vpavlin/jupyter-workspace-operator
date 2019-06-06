@@ -22,7 +22,7 @@
             "targetPort": "jupyter-tcp"
         },
         "tls": {
-{% if openshift_auth %}
+{% if openshift_auth is sameas true %}
             "termination": "Reencrypt",
 {% else %}
             "termination": "Edge",
